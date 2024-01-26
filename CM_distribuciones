@@ -28,13 +28,349 @@ end
 
 # ╔═╡ 7a979ebc-a370-4d72-a2b9-c3200f0d6051
 """
-		<h2>
+		<h1>
 		    <center>
 		          Distribuciones de las Cadenas de Markov
 		    </center>
-		</h2>
+		</h1>
 Elaborado por Freddy Hernández
 """|>HTML
+
+# ╔═╡ 039e8706-6b65-49bc-ab8c-e0816b6433e4
+PlutoUI.TableOfContents(title="", aside=true)
+
+# ╔═╡ 6fa50b3e-149b-4c2f-b43d-08244939dd37
+md"""
+## Componentes de la cadena de Markov
+"""
+
+# ╔═╡ c71ad935-e568-4dea-993c-148f4ebb1fbc
+md"""
+#### Ejemplos de matriz de transición 
+"""
+
+# ╔═╡ 1708f142-b314-45f2-ba6a-3d7b076d2ec3
+begin
+	# 2X2
+	
+	tm_2X2 = spzeros(2,2)
+	
+	tm_2X2[1,1] = 0.75
+	tm_2X2[1,2] = 0.25
+	
+	tm_2X2[2,1] = 0.25
+	tm_2X2[2,2] = 0.75
+
+	tm_2X2	
+end
+
+# ╔═╡ 8f8ee61b-0ef4-44d4-950e-075b6e5b42d2
+begin
+	# 3X3
+	
+	tm_3X3 = spzeros(3,3)
+	
+	tm_3X3[1,1] = 0.5
+	tm_3X3[1,2] = 0.25
+	tm_3X3[1,3] = 0.25
+
+	tm_3X3[2,1] = 0.5
+	tm_3X3[2,2] = 0.25
+	tm_3X3[2,3] = 0.25
+
+	tm_3X3[3,1] = 0.25
+	tm_3X3[3,2] = 0.25
+	tm_3X3[3,3] = 0.5
+	
+
+	tm_3X3
+end
+
+# ╔═╡ 70d404ea-3b3a-4ef8-9ee1-0ae65baa7361
+begin
+	# 4X4
+	
+	tm_4X4 = spzeros(4,4)
+	
+	tm_4X4[1,1] = 0.3
+	tm_4X4[1,2] = 0.2
+	tm_4X4[1,3] = 0.5
+	tm_4X4[1,4] = 0
+
+	tm_4X4[2,1] = 0.1
+	tm_4X4[2,2] = 0
+	tm_4X4[2,3] = 0.9
+	tm_4X4[2,4] = 0
+
+	tm_4X4[3,1] = 0
+	tm_4X4[3,2] = 0
+	tm_4X4[3,3] = 0.8
+	tm_4X4[3,4] = 0.2
+
+	tm_4X4[4,1] = 0.5
+	tm_4X4[4,2] = 0
+	tm_4X4[4,3] = 0
+	tm_4X4[4,4] = 0.5
+	
+
+	tm_4X4	
+end
+
+# ╔═╡ 92485c71-5a62-45e5-9083-188d9413a83b
+begin
+	# 5X5
+	
+	tm_5X5 = spzeros(5,5)
+	
+	tm_5X5[1,1] = 0.25
+	tm_5X5[1,2] = 0.25
+	tm_5X5[1,3] = 0.2
+	tm_5X5[1,4] = 0.2
+	tm_5X5[1,5] = 0.1
+
+	tm_5X5[2,1] = 0.2
+	tm_5X5[2,2] = 0.25
+	tm_5X5[2,3] = 0.2
+	tm_5X5[2,4] = 0.25
+	tm_5X5[2,5] = 0.1
+
+	tm_5X5[3,1] = 0.25
+	tm_5X5[3,2] = 0.2
+	tm_5X5[3,3] = 0.2
+	tm_5X5[3,4] = 0.25
+	tm_5X5[3,5] = 0.1
+
+	tm_5X5[4,1] = 0.2
+	tm_5X5[4,2] = 0.2
+	tm_5X5[4,3] = 0.25
+	tm_5X5[4,4] = 0.25
+	tm_5X5[4,5] = 0.1
+
+	tm_5X5[5,1] = 0.25
+	tm_5X5[5,2] = 0.2
+	tm_5X5[5,3] = 0.25
+	tm_5X5[5,4] = 0.2
+	tm_5X5[5,5] = 0.1
+	
+
+	tm_5X5	
+end
+
+# ╔═╡ 9413c818-5fb1-4b69-bfd3-ef3aacefde76
+begin
+	# 6X6
+	
+	tm_6X6 = spzeros(6,6)
+	
+	tm_6X6[1,1] = 0
+	tm_6X6[1,2] = 1
+	tm_6X6[1,3] = 0
+	tm_6X6[1,4] = 0
+	tm_6X6[1,5] = 0
+	tm_6X6[1,6] = 0
+
+	tm_6X6[2,1] = 1
+	tm_6X6[2,2] = 0
+	tm_6X6[2,3] = 0
+	tm_6X6[2,4] = 0
+	tm_6X6[2,5] = 0
+	tm_6X6[2,6] = 0
+
+	tm_6X6[3,1] = 0
+	tm_6X6[3,2] = 1/3
+	tm_6X6[3,3] = 1/3
+	tm_6X6[3,4] = 1/3
+	tm_6X6[3,5] = 0
+	tm_6X6[3,6] = 0
+
+	tm_6X6[4,1] = 0
+	tm_6X6[4,2] = 0
+	tm_6X6[4,3] = 0
+	tm_6X6[4,4] = 1/3
+	tm_6X6[4,5] = 2/3
+	tm_6X6[4,6] = 0
+
+	tm_6X6[5,1] = 0
+	tm_6X6[5,2] = 0
+	tm_6X6[5,3] = 0
+	tm_6X6[5,4] = 0.5
+	tm_6X6[5,5] = 0.5
+	tm_6X6[5,6] = 0
+
+	tm_6X6[6,1] = 0
+	tm_6X6[6,2] = 0
+	tm_6X6[6,3] = 0
+	tm_6X6[6,4] = 1/6
+	tm_6X6[6,5] = 0.5
+	tm_6X6[6,6] = 1/3
+	
+
+	tm_6X6	
+end
+
+# ╔═╡ 7dec1986-55f1-4db8-ac7d-af7fcd773b81
+begin
+	# Basic Symmetric Random Walk
+	
+	tm_basic_symmetric_random_walk = spzeros(4,4)
+	
+	tm_basic_symmetric_random_walk[1,2] = 0.5
+	tm_basic_symmetric_random_walk[1,4] = 0.5
+	
+	tm_basic_symmetric_random_walk[2,1] = 0.5
+	tm_basic_symmetric_random_walk[2,3] = 0.5
+
+	tm_basic_symmetric_random_walk[3,2] = 0.5
+	tm_basic_symmetric_random_walk[3,4] = 0.5
+	
+	tm_basic_symmetric_random_walk[4,1] = 0.5
+	tm_basic_symmetric_random_walk[4,3] = 0.5
+
+	tm_basic_symmetric_random_walk	
+end
+
+# ╔═╡ 4eb60426-d5b2-40e6-916e-4a0387dcf02a
+begin
+	# Basic Asymmetric Random Walk
+	
+	tm_basic_asymmetric_random_walk = spzeros(4,4)
+	
+	tm_basic_asymmetric_random_walk[1,2] = 0.25
+	tm_basic_asymmetric_random_walk[1,4] = 0.75
+	
+	tm_basic_asymmetric_random_walk[2,1] = 0.75
+	tm_basic_asymmetric_random_walk[2,3] = 0.25
+
+	tm_basic_asymmetric_random_walk[3,2] = 0.75
+	tm_basic_asymmetric_random_walk[3,4] = 0.25
+	
+	tm_basic_asymmetric_random_walk[4,1] = 0.25
+	tm_basic_asymmetric_random_walk[4,3] = 0.75
+
+	tm_basic_asymmetric_random_walk	
+end
+
+# ╔═╡ bb288185-b7f6-4b6a-8f81-828c190f5855
+begin
+	# Basic Symmetric Lazy Random Walk
+	
+	tm_basic_symmetric_lazy_random_walk = spzeros(4,4)
+
+	tm_basic_symmetric_lazy_random_walk[1,1] = 0.5
+	tm_basic_symmetric_lazy_random_walk[1,2] = 0.25
+	tm_basic_symmetric_lazy_random_walk[1,4] = 0.25
+
+	tm_basic_symmetric_lazy_random_walk[2,2] = 0.5
+	tm_basic_symmetric_lazy_random_walk[2,1] = 0.25
+	tm_basic_symmetric_lazy_random_walk[2,3] = 0.25
+
+	tm_basic_symmetric_lazy_random_walk[3,3] = 0.5
+	tm_basic_symmetric_lazy_random_walk[3,2] = 0.25
+	tm_basic_symmetric_lazy_random_walk[3,4] = 0.25
+
+	tm_basic_symmetric_lazy_random_walk[4,4] = 0.5
+	tm_basic_symmetric_lazy_random_walk[4,1] = 0.25
+	tm_basic_symmetric_lazy_random_walk[4,3] = 0.25
+
+	tm_basic_symmetric_lazy_random_walk	
+end
+
+# ╔═╡ a587d278-a193-414c-b6a4-ebd392f08803
+begin
+	# Random Walk on simple graphs (list)
+
+	keys_list_smallgraph = 
+		["bull",
+		"chvatal",
+		"cubical",
+		"desargues",
+		"diamond",
+		"dodecahedral",
+		"frucht",
+		"heawood",
+		"house",
+		"housex",
+		"icosahedral",
+		"karate",
+		"krackhardtkite",
+		"moebiuskantor",
+		"octahedral",
+		"pappus",
+		"petersen",
+		"sedgewickmaze",
+		"tetrahedral",
+		"truncatedcube",
+		"truncatedtetrahedron",
+		"truncatedtetrahedron_dir",
+		"tutte"
+		]
+
+end
+
+# ╔═╡ e0face74-8a9e-48bf-ae1c-9ce307eb4610
+@bind graph_type Select(keys_list_smallgraph, default = keys_list_smallgraph[1])
+
+# ╔═╡ 0394d786-6705-42c1-b2d7-c73ccc960a1f
+begin
+	# Random Walk on simple graphs (transition matrix)
+	
+	G_1 = smallgraph(graph_type)
+	tm_smallgraph = adjacency_matrix(G_1)./sum(adjacency_matrix(G_1),dims=2)
+end
+
+# ╔═╡ b5f39745-a01f-4dda-afe9-ee0156357ff5
+gplot(G_1)
+
+# ╔═╡ b282b3fc-59ea-4910-a04b-b225ef065257
+md"""
+#### Diccionario con los ejemplos
+"""
+
+# ╔═╡ d45fda10-f4de-46ba-807e-ec99898a503d
+begin
+	# List of keys
+	keys_list = 
+		["tm_2X2", 
+		"tm_3X3", 
+		"tm_4X4", 
+		"tm_5X5", 
+		"tm_6X6",
+		"tm_basic_symmetric_random_walk",
+		"tm_basic_asymmetric_random_walk",
+		"tm_basic_symmetric_lazy_random_walk",
+		"tm_smallgraph"
+		]
+	
+	# List of values
+	values_list = 
+		[tm_2X2, 
+		tm_3X3, 
+		tm_4X4, 
+		tm_5X5, 
+		tm_6X6,
+		tm_basic_symmetric_random_walk,
+		tm_basic_asymmetric_random_walk,
+		tm_basic_symmetric_lazy_random_walk,
+		tm_smallgraph
+		]
+	
+	# Creating a dictionary from the lists of keys and values
+	example = Dict(zip(keys_list, values_list))
+end
+
+# ╔═╡ f312b541-4121-4511-b187-4c54fb324bd2
+md"""
+### Matriz de transición
+"""
+
+# ╔═╡ 42d5b698-c214-4011-a7f1-68cd3e35bace
+begin
+	
+	@bind key Select(keys_list, default = "tm_smallgraph")
+end
+
+# ╔═╡ e6d07151-df85-4f80-929c-f7ddfe6f53e2
+transition_matrix = example[key]
 
 # ╔═╡ 368d249f-43a1-4ec0-919f-93cd24e2e6cd
 md"""
@@ -43,32 +379,7 @@ md"""
 
 # ╔═╡ 1338ba7d-e641-4d73-a4ce-4a026d67a016
 # Number of states
-number_of_states = 4
-
-# ╔═╡ f312b541-4121-4511-b187-4c54fb324bd2
-md"""
-#### Matriz de transición
-"""
-
-# ╔═╡ 419d64d6-d2b0-457f-8759-74f6e36af089
-begin
-	transition_matrix = spzeros(number_of_states,number_of_states)
-	
-	transition_matrix[1,1] = 0.3
-	transition_matrix[1,2] = 0.2
-	transition_matrix[1,3] = 0.5
-	
-	transition_matrix[2,1] = 0.1
-	transition_matrix[2,3] = 0.9
-		
-	transition_matrix[3,3] = 0.8	
-	transition_matrix[3,4] = 0.2
-
-	transition_matrix[4,4] = 0.5
-	transition_matrix[4,1] = 0.5
-
-	transition_matrix	
-end
+number_of_states = size(transition_matrix)[1]
 
 # ╔═╡ 87408efe-9092-47fd-9b62-74a81c1fd479
 md"""
@@ -82,22 +393,38 @@ Graph = 	DiGraph(transition_matrix)
 begin
 # Explanatios of attribites of graphplot can be found at https://docs.juliaplots.org/latest/generated/graph_attributes/	
 
-graphplot(Graph; nodeshape = :circle, names = 1:nv(Graph), nodecolor = fill(:skyblue, nv(Graph)), edgelabel = transition_matrix , method = :circular , edge_label_box = false, edgelabel_offset = 0.05)	
+	round.(collect(transition_matrix),digits = 3)
+
+graphplot(Graph; nodeshape = :circle, names = 1:nv(Graph), nodecolor = fill(:skyblue, nv(Graph)), edgelabel = round.(collect(transition_matrix),digits = 3) , method = :circular , edge_label_box = false, edgelabel_offset = 0.05)	
 end
 
 # ╔═╡ 1bdac9c8-2f90-4353-9ae7-1bd7a7b62743
 md"""
-#### Distribución inicial
+### Distribución inicial
 """
 
 # ╔═╡ 6cde71ba-82e1-4d90-8c77-076d6a3e89da
 begin 
 	initial_distribution = spzeros(number_of_states)
 
-	initial_distribution[1] = 0
-	initial_distribution[2] = 1
-	initial_distribution[3] = 0
-	initial_distribution[4] = 0
+	# uniform
+
+	#initial_distribution = repeat([1/number_of_states],number_of_states)
+
+	# Dirac
+
+	initial_distribution[1] = 1
+
+	
+
+	#initial_distribution[1] = 0
+	#initial_distribution[2] = 1
+	#initial_distribution[3] = 0
+	#initial_distribution[4] = 0
+	#initial_distribution[5] = 0
+	#initial_distribution[6] = 0
+	#initial_distribution[7] = 0
+	#initial_distribution[8] = 0
 
 	initial_distribution 
 end
@@ -111,7 +438,7 @@ md"""
 begin
 # Explanatios of attribites of graphplot can be found at https://docs.juliaplots.org/latest/generated/graph_attributes/		
 
-graphplot(Graph; nodeshape = :circle, names = initial_distribution, nodecolor = fill(:skyblue, nv(Graph)), edgelabel = transition_matrix , method = :circular , edge_label_box = false, edgelabel_offset = 0.05, title = "Distribución inicial")	
+graphplot(Graph; nodeshape = :circle, names = initial_distribution, nodecolor = fill(:skyblue, nv(Graph)), edgelabel = round.(collect(transition_matrix),digits = 3) , method = :circular , edge_label_box = false, edgelabel_offset = 0.05, title = "Distribución inicial")	
 end
 
 # ╔═╡ edfff0a7-c325-4a84-93da-70967f08c45b
@@ -137,17 +464,34 @@ step = @bind t Slider(0:number_of_steps; default=0 , show_value=true)
 
 # ╔═╡ 73f7987d-c1e7-47f3-9702-8cd3519cc06a
 begin
-# Explanatios of attribites of graphplot can be found at https://docs.juliaplots.org/latest/generated/graph_attributes/		
+# Explanatios of attribites of graphplot can be found at https://docs.juliaplots.org/latest/generated/graph_attributes/	
 
-graphplot(Graph; nodeshape = :circle, names = round.(X[t+1],digits = 2), nodecolor = fill(:skyblue, nv(Graph)), edgelabel = transition_matrix , method = :circular , edge_label_box = false, edgelabel_offset = 0.05, title = "Distribución en el tiempo t = $t")	
+node_colors = fill(:skyblue, nv(Graph))
+
+	if key !== "tm_smallgraph"	
+	# use this for all but smallgraphs	
+
+	graphplot(Graph; nodeshape = :circle, names = round.(X[t+1],digits = 2), nodecolor = node_colors, edgelabel = round.(collect(transition_matrix),digits = 3) , method = :circular , edge_label_box = false, edgelabel_offset = 0.05, title = "Distribución en el tiempo t = $t")	
+
+	else
+	# use this for smallgraphs
+
+	graphplot(G_1; nodeshape = :circle, names = round.(X[t+1],digits = 2), nodecolor = node_colors,  method = :circular , edge_label_box = false, edgelabel_offset = 0.05, title = "Distribución en el tiempo t = $t", curves = false)	
+
+		
+	end
+		
 end
 
 # ╔═╡ a647c02a-d78a-4acd-b511-bb316e309514
 println(round.(collect(X[t+1]),digits = 10))
 
+# ╔═╡ 9b6e7cd2-4843-4b8b-b5ac-180f0d8d3af4
+round.(collect(X[t+1]),digits = 10)
+
 # ╔═╡ 036ecc4b-8418-41f8-bc2b-224060a18fea
 md"""
-## Distribución estacionaria
+### Distribución estacionaria
 """
 
 # ╔═╡ 82f13700-88fe-490f-be96-eed320dd330f
@@ -157,11 +501,20 @@ A = collect(transpose(transition_matrix))
 eigen(A).values
 
 # ╔═╡ 4e3120d2-6376-4151-91b5-14e82e464609
-stationary_distribution = real(eigen(A).vectors[:,number_of_states] ./ sum(eigen(A).vectors[:,number_of_states] ))
+begin
+	stationary_distribution = real(eigen(A).vectors[:,number_of_states] ./ sum(eigen(A).vectors[:,number_of_states] ))
+	
+	#println(round.(stationary_distribution,digits = 10))
+
+	for i in 1:number_of_states
+
+		println( "π[$i] = ", stationary_distribution[i] )
+	end
+end
 
 # ╔═╡ ff53fbe5-21b4-47fa-af9f-1377eb973475
 md"""
-## Convergencia a la distribución estacionaria
+### Convergencia a la distribución estacionaria
 """
 
 # ╔═╡ 9bd4e7ad-e6cd-4a20-86d8-1a85733b6a7d
@@ -180,7 +533,12 @@ end
 D = MC_convergence(X, stationary_distribution)
 
 # ╔═╡ f7143cb4-705c-40e4-a9c2-b8542516fc7a
-plot(D[1:5],  ylims = (0, 1), title="Convergencia al equilibrio", legend= false)
+begin
+	domain = 0:number_of_steps
+	#domain = 0:15
+	
+	plot(domain, D[domain.+1],  ylims = (0, 1), title="Convergencia al equilibrio", legend= false)
+end
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1519,11 +1877,29 @@ version = "1.4.1+1"
 
 # ╔═╡ Cell order:
 # ╟─7a979ebc-a370-4d72-a2b9-c3200f0d6051
+# ╠═039e8706-6b65-49bc-ab8c-e0816b6433e4
 # ╠═020d5e34-b47d-11ee-109d-b992e1c14bc3
+# ╟─6fa50b3e-149b-4c2f-b43d-08244939dd37
+# ╟─c71ad935-e568-4dea-993c-148f4ebb1fbc
+# ╠═1708f142-b314-45f2-ba6a-3d7b076d2ec3
+# ╠═8f8ee61b-0ef4-44d4-950e-075b6e5b42d2
+# ╠═70d404ea-3b3a-4ef8-9ee1-0ae65baa7361
+# ╠═92485c71-5a62-45e5-9083-188d9413a83b
+# ╠═9413c818-5fb1-4b69-bfd3-ef3aacefde76
+# ╠═7dec1986-55f1-4db8-ac7d-af7fcd773b81
+# ╠═4eb60426-d5b2-40e6-916e-4a0387dcf02a
+# ╠═bb288185-b7f6-4b6a-8f81-828c190f5855
+# ╠═a587d278-a193-414c-b6a4-ebd392f08803
+# ╠═e0face74-8a9e-48bf-ae1c-9ce307eb4610
+# ╠═0394d786-6705-42c1-b2d7-c73ccc960a1f
+# ╠═b5f39745-a01f-4dda-afe9-ee0156357ff5
+# ╟─b282b3fc-59ea-4910-a04b-b225ef065257
+# ╠═d45fda10-f4de-46ba-807e-ec99898a503d
+# ╟─f312b541-4121-4511-b187-4c54fb324bd2
+# ╠═42d5b698-c214-4011-a7f1-68cd3e35bace
+# ╠═e6d07151-df85-4f80-929c-f7ddfe6f53e2
 # ╟─368d249f-43a1-4ec0-919f-93cd24e2e6cd
 # ╠═1338ba7d-e641-4d73-a4ce-4a026d67a016
-# ╟─f312b541-4121-4511-b187-4c54fb324bd2
-# ╠═419d64d6-d2b0-457f-8759-74f6e36af089
 # ╟─87408efe-9092-47fd-9b62-74a81c1fd479
 # ╠═76b45bb2-7bbd-4d03-8bb4-cf3daa60c000
 # ╟─6d8764c5-8511-444b-8e86-58c874ce669e
@@ -1537,13 +1913,14 @@ version = "1.4.1+1"
 # ╠═c01e8433-03da-4b9f-9091-9bea1902bff1
 # ╟─73f7987d-c1e7-47f3-9702-8cd3519cc06a
 # ╠═a647c02a-d78a-4acd-b511-bb316e309514
+# ╠═9b6e7cd2-4843-4b8b-b5ac-180f0d8d3af4
 # ╟─036ecc4b-8418-41f8-bc2b-224060a18fea
 # ╠═82f13700-88fe-490f-be96-eed320dd330f
 # ╠═6909cf32-5277-48f2-b05c-a874fa030ab3
 # ╠═4e3120d2-6376-4151-91b5-14e82e464609
 # ╟─ff53fbe5-21b4-47fa-af9f-1377eb973475
 # ╟─9bd4e7ad-e6cd-4a20-86d8-1a85733b6a7d
-# ╠═ae1a7e58-9f4c-4063-89fc-273076725d67
+# ╟─ae1a7e58-9f4c-4063-89fc-273076725d67
 # ╠═f7143cb4-705c-40e4-a9c2-b8542516fc7a
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
