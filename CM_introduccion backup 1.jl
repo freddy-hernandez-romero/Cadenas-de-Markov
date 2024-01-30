@@ -33,7 +33,7 @@ end
 		          Introducción a las Cadenas de Markov
 		    </center>
 		</h1>
-<em> Elaborado por Freddy Hernández </em>
+Elaborado por Freddy Hernández
 """|>HTML
 
 # ╔═╡ 1e60846e-13cf-437e-8886-ed88a40f860e
@@ -1856,7 +1856,7 @@ version = "1.4.1+1"
 # ╠═cb719cf8-46d2-4497-bd06-93db5cc8ee63
 # ╠═8ff8afa3-9677-4823-a605-dc1f2b6dad0c
 # ╠═bf927968-7096-4650-a9d7-2830b1298320
-# ╠═4bf5727f-ae4d-4d0c-b836-de3650f1a664
+# ╟─4bf5727f-ae4d-4d0c-b836-de3650f1a664
 # ╠═a1422e85-be61-4e05-8111-4e026b65ac99
 # ╠═866e7e63-8f0a-45c5-a944-e96465bea487
 # ╠═b6e8cb34-514e-4ff2-b978-0930a7b6fe9f
@@ -1869,7 +1869,7 @@ version = "1.4.1+1"
 # ╠═b2bcc95b-1dae-490d-a90f-54976e1e84b7
 # ╟─87408efe-9092-47fd-9b62-74a81c1fd479
 # ╠═76b45bb2-7bbd-4d03-8bb4-cf3daa60c000
-# ╠═6d8764c5-8511-444b-8e86-58c874ce669e
+# ╟─6d8764c5-8511-444b-8e86-58c874ce669e
 # ╟─1bdac9c8-2f90-4353-9ae7-1bd7a7b62743
 # ╠═6cde71ba-82e1-4d90-8c77-076d6a3e89da
 # ╟─e96a408b-be0b-409c-9645-edd4809442e5
@@ -1878,6 +1878,7 @@ version = "1.4.1+1"
 # ╠═edfff0a7-c325-4a84-93da-70967f08c45b
 # ╠═cf59fe4b-3223-430f-baae-4c3952a914b7
 # ╠═87ed82bc-a823-4e67-af05-5de6119f41cc
+# ╠═c01e8433-03da-4b9f-9091-9bea1902bff1
 # ╠═834863d3-d29a-4245-b472-5cb467e12fa3
 # ╠═e4b29572-0e77-4675-9887-d9be9a0191f2
 # ╠═40223338-50d4-4c66-aa64-f3cf5afebdf9
