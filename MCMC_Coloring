@@ -29,7 +29,7 @@ end
 """
 		<h1>
 		    <center>
-		          MCMC: Modelo <em> Hard Core </em>
+		          MCMC: <em> q-Coloraciones aleatórias </em>
 		    </center>
 		</h1>
 <em>Elaborado por Freddy Hernández </em>
@@ -111,8 +111,8 @@ md"""
 begin
 	# Square Lattice dimentions m X n
 	
-	m = 15
-	n = 15
+	m = 13
+	n = 13
 	
 end
 
@@ -177,34 +177,39 @@ md"""
 """
 
 # ╔═╡ 44951d7c-3ebf-48f2-ab33-1c435748869e
-function MCMC_Gibbs_sampler_step(current_coloring, graph)
+function MCMC_Gibbs_sampler_step(current_coloring, graph, number_of_colors)
 
 	new_coloring = copy(current_coloring)
 	
 	# Pick a vertex at random
 
-		vertex = sample(1:nv(graph))
-		r = sample([0,1])
+	vertex = sample(1:nv(graph))
+	
+		###########################
+		# Define the arrays
+		arr1 = 1:number_of_colors
+		arr2 = new_coloring[all_neighbors(graph,vertex)]
+		
+		# Convert arrays to sets and compute the set difference
+		diff_set = setdiff(Set(arr1), Set(arr2))
+		
+		# Convert the result back to an array
+		available_colors = collect(diff_set)
+		#################################
+	
+	new_coloring[vertex] = sample(available_colors)
 
-    #if	:black in current_coloring[all_neighbors(graph,index)]
-	if	:black in new_coloring[all_neighbors(graph,vertex)]
-	else 
-		if r == 1
-			new_coloring[vertex] = :black
-		end
-	end
-
-		return new_coloring
+	return new_coloring
 	
 end
 
 # ╔═╡ 9f616819-632a-4eb2-8615-7fa201d61133
-function MCMC_Gibbs_sampler_path(initial_coloring, graph, number_of_steps)
+function MCMC_Gibbs_sampler_path(initial_coloring, graph, number_of_colors, number_of_steps)
 	
 	X = [copy(initial_coloring)]
 
 	for i in 1:number_of_steps
-		push!(X , MCMC_Gibbs_sampler_step(X[i], graph) )
+		push!(X , MCMC_Gibbs_sampler_step(X[i], graph, number_of_colors) )
 	end
 
 	return X
@@ -216,36 +221,56 @@ md"""
 """
 
 # ╔═╡ 458e3383-e21e-4957-9e13-56fe81fc133c
-function MCMC_Systematic_Gibbs_sampler_step(current_coloring, graph, vertex)
+function MCMC_Systematic_Gibbs_sampler_step(current_coloring, graph,  number_of_colors, vertex)
 
 	new_coloring = copy(current_coloring)
 	
-	# Pick a vertex at random
 
-		r = sample([0,1])
-
-    #if	:black in current_coloring[all_neighbors(graph,index)]
-	if	:black in new_coloring[all_neighbors(graph,vertex)]
-	else 
-		if r == 1
-			new_coloring[vertex] = :black
-		end
-	end
+    ###########################
+		# Define the arrays
+		arr1 = 1:number_of_colors
+		arr2 = new_coloring[all_neighbors(graph,vertex)]
+		
+		# Convert arrays to sets and compute the set difference
+		diff_set = setdiff(Set(arr1), Set(arr2))
+		
+		# Convert the result back to an array
+		available_colors = collect(diff_set)
+		#################################
+	
+	new_coloring[vertex] = sample(available_colors)
 
 		return new_coloring
 	
 end
 
 # ╔═╡ c27f8d4a-1b98-4b7d-a02e-3b3c21875bc5
-function MCMC_Systematic_Gibbs_sampler_path(initial_coloring, graph, number_of_steps)
+function MCMC_Systematic_Gibbs_sampler_path(initial_coloring, graph, number_of_colors, number_of_steps)
 	
 	X = [copy(initial_coloring)]
 
 	for i in 1:number_of_steps
-		push!(X , MCMC_Systematic_Gibbs_sampler_step(X[i], graph,((i-1)%nv(graph))+1) )
+		push!(X , MCMC_Systematic_Gibbs_sampler_step(X[i], graph, number_of_colors,((i-1)%nv(graph))+1) )
 	end
 
 	return X
+end
+
+# ╔═╡ ea654b81-9585-410c-ac93-70c6ff45a39d
+md"""
+#### funcion de verificación de q-coloración
+"""
+
+# ╔═╡ 10376e2c-abc1-4e56-a166-f96c4bb66408
+function is_q_coloring(graph,coloring)
+	s = 0
+	for i in 1:nv(graph)
+		if coloring[i] in coloring[all_neighbors(graph,i)]
+			s = s+1
+		end	
+	end
+
+	return if s==0 "Sí es q-coloración" else "No es q-coloración" end
 end
 
 # ╔═╡ e0f191e6-0d75-4316-86b4-dad31d98343a
@@ -256,10 +281,63 @@ md"""
 # ╔═╡ af39100f-c06a-43d3-8164-34db7416cb72
 begin
 	number_of_steps = 1000
+	
+	# choose the graph: square_lattice or G_1
+	
 	#graph = square_lattice
 	graph = G_1
-	coloracion_inicial = [:white for _ in 1:nv(graph)]
+	
+	number_of_colors = 5
+	no_coloracion_inicial = [1 for _ in 1:nv(graph)]
 end
+
+# ╔═╡ 53106f84-28a4-4b01-bbeb-446ca0c6f939
+md"""
+##### una q-coloración (para iniciar)
+"""
+
+# ╔═╡ b70d3901-68f7-426a-8a4a-db546bcceb6b
+begin
+	coloracion_inicial = [1 for _ in 1:nv(graph)]
+	Cumulative = [1]	
+	
+	for i in 1:nv(graph)
+		if setdiff(Set(1:nv(graph)), Set(Cumulative)) != Set([])
+
+			coloracion_inicial[collect(setdiff(Set(all_neighbors(graph,i)),Set(Cumulative)))] .= (i%number_of_colors) + 1
+			
+			#a[all_neighbors(graph,i)] .= ((i%number_of_colors) + 1
+			
+			Cumulative = collect(
+			union(
+				Set(Cumulative), Set(all_neighbors(graph,i))
+				)
+			)
+		end	
+	end
+	
+	coloracion_inicial
+	#is_q_coloring(graph,a)
+	#=
+	#####################
+	coloracion_inicial = [1 for _ in 1:nv(graph)]
+	
+	for i in 1:nv(graph)
+		coloracion_inicial[all_neighbors(graph,i)] .= ((i-1)%number_of_colors) + 1
+	end
+
+	
+	coloracion_inicial
+
+	#all_neighbors(graph,1)
+	############################
+	=#
+end
+
+# ╔═╡ 978aedaf-86a4-4937-aea0-010ab9c6b5b5
+# can choose from ":tab",":tab20",":tab20b", ":tab20c", "viridis", "plasma", "inferno", "magma", etc.
+	
+colors = palette(:tab20,number_of_colors)
 
 # ╔═╡ 3059a6ed-d261-4ff4-9bd8-6aec82be45dc
 md"""
@@ -268,8 +346,10 @@ md"""
 
 # ╔═╡ a6dc8b70-901d-4693-9f05-9f3c0082af7a
 begin
-	#Y = MCMC_Gibbs_sampler_path(coloracion_inicial, graph, number_of_steps)
-	Y = MCMC_Systematic_Gibbs_sampler_path(coloracion_inicial, graph, number_of_steps)
+	#Y = MCMC_Gibbs_sampler_path(coloracion_inicial, graph, number_of_colors, number_of_steps)
+	#Y = MCMC_Gibbs_sampler_path(no_coloracion_inicial, graph, number_of_colors, number_of_steps)
+	#Y = MCMC_Systematic_Gibbs_sampler_path(coloracion_inicial, graph, number_of_colors, number_of_steps)
+	Y = MCMC_Systematic_Gibbs_sampler_path(no_coloracion_inicial, graph, number_of_colors, number_of_steps)
 end
 
 # ╔═╡ 1e2f93ac-7728-48f4-89ad-05c18929250e
@@ -280,6 +360,9 @@ md"""
 # ╔═╡ 0a90f986-1648-4f58-8409-41f195504597
 tt = @bind t Slider(0:number_of_steps; default=0 , show_value=true)
 
+# ╔═╡ e6e07aa7-3db6-4ccb-bb9e-3b4d60d9a14f
+is_q_coloring(graph,Y[t+1])
+
 # ╔═╡ 735b9ce7-5a58-4cba-ba13-119b7f21c2ce
 begin	
 
@@ -287,7 +370,7 @@ begin
 
 	graphplot(graph;
 	#nodeshape = :circle, names = names,fontsize = 5,nodecolor = node_colors,  method = :circular, edge_label_box = false, curves = false, 
-		title = "Simulación en el paso t = $t",
+		title = "paso t = $t    $(is_q_coloring(graph,Y[t+1]))",
 		dim = 2,
 		free_dims = nothing,
 		T = Float64,
@@ -298,9 +381,9 @@ begin
 		names = [], #1:n*m, #[],
 		fontsize = 7,
 		nodeshape = :circle,
-		nodesize = 2, #1,
+		nodesize = 1, #2, #1,
 		node_z = nothing,
-		nodecolor = Y[t+1], #node_colors, #1,
+		nodecolor = colors[Y[t+1]], #node_colors, #1,
 		nodestrokealpha = 1,
 		nodealpha = 1,
 		nodestrokewidth = 0.1,
@@ -328,7 +411,7 @@ begin
 		NODESIZE =0.01,
 		)
 	else
-		gplot(graph,layout=ll, nodefillc = [string(sym) for sym in Y[t+1]])
+		gplot(graph,layout=ll, nodefillc = colors[Y[t+1]])
 	end
 	
 end
@@ -343,6 +426,15 @@ Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 Multigraphs = "7ebac608-6c66-46e6-9856-b5f43e107bac"
 Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
+
+[compat]
+Distributions = "~0.25.102"
+GraphPlot = "~0.5.2"
+GraphRecipes = "~0.5.12"
+Graphs = "~1.9.0"
+Multigraphs = "~0.3.0"
+Plots = "~1.39.0"
+PlutoUI = "~0.7.52"
 """
 
 # ╔═╡ 00000000-0000-0000-0000-000000000002
@@ -351,7 +443,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.9.1"
 manifest_format = "2.0"
-project_hash = "6ee78f00e46a2a1e42cec16de616fd4929b5aed2"
+project_hash = "97c7b63b88b52c2780e5dcd722a903f491b21023"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -1773,12 +1865,18 @@ version = "1.4.1+1"
 # ╟─328f56b4-93c1-4299-a24d-7ffe386e0c1a
 # ╠═458e3383-e21e-4957-9e13-56fe81fc133c
 # ╠═c27f8d4a-1b98-4b7d-a02e-3b3c21875bc5
+# ╟─ea654b81-9585-410c-ac93-70c6ff45a39d
+# ╠═10376e2c-abc1-4e56-a166-f96c4bb66408
 # ╟─e0f191e6-0d75-4316-86b4-dad31d98343a
 # ╠═af39100f-c06a-43d3-8164-34db7416cb72
+# ╟─53106f84-28a4-4b01-bbeb-446ca0c6f939
+# ╠═b70d3901-68f7-426a-8a4a-db546bcceb6b
+# ╠═978aedaf-86a4-4937-aea0-010ab9c6b5b5
 # ╟─3059a6ed-d261-4ff4-9bd8-6aec82be45dc
 # ╠═a6dc8b70-901d-4693-9f05-9f3c0082af7a
 # ╟─1e2f93ac-7728-48f4-89ad-05c18929250e
 # ╠═0a90f986-1648-4f58-8409-41f195504597
-# ╟─735b9ce7-5a58-4cba-ba13-119b7f21c2ce
+# ╠═e6e07aa7-3db6-4ccb-bb9e-3b4d60d9a14f
+# ╠═735b9ce7-5a58-4cba-ba13-119b7f21c2ce
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
