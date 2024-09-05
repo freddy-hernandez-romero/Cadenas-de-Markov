@@ -251,6 +251,11 @@ md"""
 # ╔═╡ a6dc8b70-901d-4693-9f05-9f3c0082af7a
 Y = random_colorings(graph, number_of_colors, sample_size)
 
+# ╔═╡ 9233c971-b885-4c7a-9658-20b5d333ea10
+md"""
+### Verificando q-coloraciones
+"""
+
 # ╔═╡ 553435cc-a2ee-4580-a6bf-af2519cbc050
 C = is_q_coloring_vector(graph,Y)
 
@@ -377,7 +382,7 @@ SimpleGraphs = "~0.8.6"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.9.1"
+julia_version = "1.9.2"
 manifest_format = "2.0"
 project_hash = "3f1442d275a7c15c8c572a2f5e5dc1c69ece54ea"
 
@@ -596,7 +601,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.0.2+0"
+version = "1.0.5+0"
 
 [[deps.Compose]]
 deps = ["Base64", "Colors", "DataStructures", "Dates", "IterTools", "JSON", "LinearAlgebra", "Measures", "Printf", "Random", "Requires", "Statistics", "UUIDs"]
@@ -1389,7 +1394,7 @@ version = "0.42.2+0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.9.0"
+version = "1.9.2"
 
 [[deps.PlotThemes]]
 deps = ["PlotUtils", "Statistics"]
@@ -2131,6 +2136,7 @@ version = "1.4.1+1"
 # ╠═978aedaf-86a4-4937-aea0-010ab9c6b5b5
 # ╟─049b1872-ade1-4421-a65a-85165a40ee57
 # ╠═a6dc8b70-901d-4693-9f05-9f3c0082af7a
+# ╟─9233c971-b885-4c7a-9658-20b5d333ea10
 # ╠═553435cc-a2ee-4580-a6bf-af2519cbc050
 # ╠═f1387343-a451-4cb4-8b5b-941accd2083e
 # ╟─1e2f93ac-7728-48f4-89ad-05c18929250e
