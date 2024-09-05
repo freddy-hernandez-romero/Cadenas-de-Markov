@@ -284,8 +284,8 @@ begin
 	
 	# choose the graph: square_lattice or G_1
 	
-	#graph = square_lattice
-	graph = G_1
+	graph = square_lattice
+	#graph = G_1
 	
 	number_of_colors = 5
 	no_coloracion_inicial = [1 for _ in 1:nv(graph)]

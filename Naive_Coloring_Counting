@@ -33,7 +33,7 @@ end
 		<h1>
 		    <center>
 		          Método Montecarlo 
-						<h2> Conteo de <em> q-Coloraciones </em> </h2>
+						<h2> Conteo "naïve" de <em> q-Coloraciones </em> </h2>
 		    </center>
 		</h1>
 <em>Elaborado por Freddy Hernández </em>
@@ -243,6 +243,11 @@ end
 	
 colors = palette(:tab20,number_of_colors)
 
+# ╔═╡ 049b1872-ade1-4421-a65a-85165a40ee57
+md"""
+### Generando muestra
+"""
+
 # ╔═╡ a6dc8b70-901d-4693-9f05-9f3c0082af7a
 Y = random_colorings(graph, number_of_colors, sample_size)
 
@@ -328,37 +333,7 @@ md"""
 """
 
 # ╔═╡ e46c7e84-a8d1-45a9-8c39-22e70fa293e9
-floor(Int, mean((number_of_colors^nv(graph))*last(cumulative_average_C,floor(Int,0.1*sample_size))))
-
-# ╔═╡ febc03f3-5d08-4953-a185-7483fcfeac97
-
-
-# ╔═╡ 81d93c2b-75ee-4359-b1a4-d4163aa8182c
-
-
-# ╔═╡ d748e9a8-5819-45d6-b21f-e2276bf1a016
-
-
-# ╔═╡ 72853326-d3c9-406e-be35-998f4d9c67d9
-
-
-# ╔═╡ dfd4496e-6ce8-453d-a315-9c7564035c2f
-
-
-# ╔═╡ aeedd15e-114f-4638-8727-ad716830c149
-
-
-# ╔═╡ e0b21adc-562a-43fe-89ac-b2c4ce1b857c
-
-
-# ╔═╡ 2c6c4651-c740-4e32-ba51-4e1580376de6
-
-
-# ╔═╡ 076a592c-bfd7-4d83-bcbd-1c5da05475b2
-
-
-# ╔═╡ c64f8b03-0868-424b-a51a-8c8ec37262fa
-
+floor(Int, mean((number_of_colors^nv(graph))*last(cumulative_average_C,floor(Int,0.8*sample_size))))
 
 # ╔═╡ 42d4a361-d4af-4fe3-ad5f-e63849b2aeed
 md"""
@@ -402,7 +377,7 @@ SimpleGraphs = "~0.8.6"
 PLUTO_MANIFEST_TOML_CONTENTS = """
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.9.2"
+julia_version = "1.9.1"
 manifest_format = "2.0"
 project_hash = "3f1442d275a7c15c8c572a2f5e5dc1c69ece54ea"
 
@@ -621,7 +596,7 @@ weakdeps = ["Dates", "LinearAlgebra"]
 [[deps.CompilerSupportLibraries_jll]]
 deps = ["Artifacts", "Libdl"]
 uuid = "e66e0078-7015-5450-92f7-15fbd957f2ae"
-version = "1.0.5+0"
+version = "1.0.2+0"
 
 [[deps.Compose]]
 deps = ["Base64", "Colors", "DataStructures", "Dates", "IterTools", "JSON", "LinearAlgebra", "Measures", "Printf", "Random", "Requires", "Statistics", "UUIDs"]
@@ -1414,7 +1389,7 @@ version = "0.42.2+0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "REPL", "Random", "SHA", "Serialization", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.9.2"
+version = "1.9.0"
 
 [[deps.PlotThemes]]
 deps = ["PlotUtils", "Statistics"]
@@ -2154,6 +2129,7 @@ version = "1.4.1+1"
 # ╟─e0f191e6-0d75-4316-86b4-dad31d98343a
 # ╠═af39100f-c06a-43d3-8164-34db7416cb72
 # ╠═978aedaf-86a4-4937-aea0-010ab9c6b5b5
+# ╟─049b1872-ade1-4421-a65a-85165a40ee57
 # ╠═a6dc8b70-901d-4693-9f05-9f3c0082af7a
 # ╠═553435cc-a2ee-4580-a6bf-af2519cbc050
 # ╠═f1387343-a451-4cb4-8b5b-941accd2083e
@@ -2161,20 +2137,10 @@ version = "1.4.1+1"
 # ╠═0a90f986-1648-4f58-8409-41f195504597
 # ╠═e6e07aa7-3db6-4ccb-bb9e-3b4d60d9a14f
 # ╟─735b9ce7-5a58-4cba-ba13-119b7f21c2ce
-# ╠═b45f4924-6a3f-49df-afc4-0617647125f6
-# ╠═177a8fc0-5d77-4eec-a8eb-0ac729d3c4b0
+# ╟─b45f4924-6a3f-49df-afc4-0617647125f6
+# ╟─177a8fc0-5d77-4eec-a8eb-0ac729d3c4b0
 # ╟─635852fe-7e05-437e-ac3c-06702057c14b
 # ╠═e46c7e84-a8d1-45a9-8c39-22e70fa293e9
-# ╠═febc03f3-5d08-4953-a185-7483fcfeac97
-# ╠═81d93c2b-75ee-4359-b1a4-d4163aa8182c
-# ╠═d748e9a8-5819-45d6-b21f-e2276bf1a016
-# ╠═72853326-d3c9-406e-be35-998f4d9c67d9
-# ╠═dfd4496e-6ce8-453d-a315-9c7564035c2f
-# ╠═aeedd15e-114f-4638-8727-ad716830c149
-# ╠═e0b21adc-562a-43fe-89ac-b2c4ce1b857c
-# ╠═2c6c4651-c740-4e32-ba51-4e1580376de6
-# ╠═076a592c-bfd7-4d83-bcbd-1c5da05475b2
-# ╠═c64f8b03-0868-424b-a51a-8c8ec37262fa
 # ╟─42d4a361-d4af-4fe3-ad5f-e63849b2aeed
 # ╠═691c4bdd-1382-47f3-a43d-e6c4be12fade
 # ╠═d0209a40-84ba-48d2-b828-a4d6a58547b5
